@@ -15,14 +15,21 @@ jobs:
       uses: thomaseizinger/set-crate-version@master
       with:
         version: ${{ github.ref }}
+    # - name: Commit the new version
+    #   uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
+    #   with:
+    #     add: 'Cargo.toml'
+    #     message: 'Set Cargo.toml to the right version'
+
     - name: Commit the new version
-      uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
+      uses: github-actions-x/commit@v2.6
       with:
-        add: 'Cargo.toml'
-        message: 'Set Cargo.toml to the right version'
-    env:
-      # This is necessary in order to push a commit to the repo
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        # push-branch: 'master'
+        commit-message: 'Set Cargo.toml to the right version'
+        files: 'Cargo.toml'
+        # name: commiter name
+        # email: my.github@email.com 
 
   # publish-github:
   #   name: Publish to GitHub release for ${{ matrix.os }}
