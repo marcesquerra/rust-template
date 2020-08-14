@@ -47,8 +47,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build --release --locked
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Build release
+      uses: actions-rs/cargo@v1
+      with:
+        command: build
+        args: --release
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
@@ -57,15 +64,22 @@ jobs:
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
 
-  # publish-crates:
-  #   name: Publish to crates.io
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Bump crate version
-  #     uses: thomaseizinger/set-crate-version@master
-  #     with:
-  #       version: ${{ github.ref }}
-  #   - name: Make a commit
-  #     run: |
-  #         git add Cargo.toml
-  #             git commit --message "Bump versions for upcoming release"
+  publish-crates:
+    name: Publish to crates.io
+    needs: set-version
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Login Cargo
+      uses: actions-rs/cargo@v1
+      with:
+        command: login
+        args: ${{ secrets.CRATES_API_TOKEN }}
+    - name: Publish
+      uses: actions-rs/cargo@v1
+      with:
+        command: publish
+
