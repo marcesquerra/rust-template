@@ -1,6 +1,6 @@
 [package]
 name = "docked"
-version = "refs/tags/v0.0.9"
+version = "v0.0.11"
 authors = ["dunlord"]
 edition = "2018"
 
