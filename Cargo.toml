@@ -3,6 +3,8 @@ name = "docked"
 version = "0.0.15"
 authors = ["dunlord"]
 edition = "2018"
+description = "Thin wrapper around docker to lunch apps locally in a container"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
