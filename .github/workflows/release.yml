@@ -25,11 +25,11 @@ jobs:
       uses: github-actions-x/commit@v2.6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        # push-branch: 'master'
+        push-branch: 'master'
         commit-message: 'Set Cargo.toml to the right version'
         files: 'Cargo.toml'
-        # name: commiter name
-        # email: my.github@email.com 
+        name: Marc Esquerra
+        email: esquerra@gmail.com
 
   # publish-github:
   #   name: Publish to GitHub release for ${{ matrix.os }}
