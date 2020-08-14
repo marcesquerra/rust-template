@@ -1,6 +1,1 @@
-*.class
-*.log
-*.hnir
-
-target/
-/project/project
+/target
