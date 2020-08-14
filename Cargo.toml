@@ -1,6 +1,6 @@
 [package]
 name = "docked"
-version = "v0.0.11"
+version = "v0.0.12"
 authors = ["dunlord"]
 edition = "2018"
 
