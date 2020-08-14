@@ -30,6 +30,7 @@ jobs:
 
   publish-github:
     name: Publish to GitHub release for ${{ matrix.os }}
+    needs: set-version
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
