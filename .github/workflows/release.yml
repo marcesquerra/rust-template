@@ -20,6 +20,9 @@ jobs:
       with:
         add: 'Cargo.toml'
         message: 'Set Cargo.toml to the right version'
+    env:
+      # This is necessary in order to push a commit to the repo
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
 
   # publish-github:
   #   name: Publish to GitHub release for ${{ matrix.os }}
