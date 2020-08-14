@@ -1,20 +1,12 @@
-# Scala CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/sample-config/ for more details
-#
-version: 2
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/openjdk:8-jdk
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    working_directory: ~/repo
+  build-linux:
+    machine:
+      image: ubuntu-1604:201903-01
 
     environment:
       # Customize the JVM maximum heap limit
@@ -23,20 +15,66 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Install LLVM
+          command: |
+            sudo apt-get update
+            wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+            sudo apt-add-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-6.0 main"
+            sudo apt-get update
+            sudo apt-get install -y clang-6.0 libunwind-dev libgc-dev libre2-dev
 
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "build.sbt" }}
+            - v1-linux-dependencies-{{ checksum "build.sbt" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v1-linux-dependencies-
 
       - run: cat /dev/null | sbt test:compile
 
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies--{{ checksum "build.sbt" }}
+          key: v1-linux-dependencies--{{ checksum "build.sbt" }}
 
       # run tests!
-      - run: cat /dev/null | sbt test:test
+      - run: cat /dev/null | sbt run
+  build-mac:
+    executor: win/default
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+      - run:
+          name: Install LLVM
+          command: |
+            brew install llvm bdw-gc re2
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-darwin-dependencies-{{ checksum "build.sbt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-darwin-dependencies-
+
+      - run: cat /dev/null | sbt test:compile
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-darwin-dependencies--{{ checksum "build.sbt" }}
+
+      # run tests!
+      - run: cat /dev/null | sbt run
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build-linux:
+          name: Build Linux version
+      - build-mac:
+          name: Build Mac version
