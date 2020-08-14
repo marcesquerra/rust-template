@@ -17,7 +17,7 @@ jobs:
             asset_name: docked-linux-amd64
           - os: windows-latest
             artifact_name: docked.exe
-            asset_name: docked-windows-amd64
+            asset_name: docked-windows-amd64.exe
           - os: macos-latest
             artifact_name: docked
             asset_name: docked-macos-amd64
