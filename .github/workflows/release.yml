@@ -15,10 +15,6 @@ jobs:
       uses: thomaseizinger/set-crate-version@master
       with:
         version: ${{ github.ref }}
-    - name: Make a commit
-      run: |
-          git add Cargo.toml
-          git commit --message "Bump versions for upcoming release"
     - name: Commit the new version
       uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
       with:
