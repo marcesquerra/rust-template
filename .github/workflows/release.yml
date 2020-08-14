@@ -28,8 +28,8 @@ jobs:
         push-branch: 'master'
         commit-message: 'Set Cargo.toml to the right version'
         files: 'Cargo.toml'
-        name: Marc Esquerra
-        email: esquerra@gmail.com
+        name: ${{ github.event.pusher.name }}
+        email: ${{ github.event.pusher.email }}
 
   # publish-github:
   #   name: Publish to GitHub release for ${{ matrix.os }}
