@@ -14,13 +14,7 @@ jobs:
     - name: Bump crate version
       uses: thomaseizinger/set-crate-version@master
       with:
-        version: ${{ github.ref }}
-    # - name: Commit the new version
-    #   uses: EndBug/add-and-commit@v4 # You can change this to use a specific version
-    #   with:
-    #     add: 'Cargo.toml'
-    #     message: 'Set Cargo.toml to the right version'
-
+        version: ${{ github.event.release.tag_name }}
     - name: Commit the new version
       uses: github-actions-x/commit@v2.6
       with:
@@ -31,33 +25,33 @@ jobs:
         name: ${{ github.event.pusher.name }}
         email: ${{ github.event.pusher.email }}
 
-  # publish-github:
-  #   name: Publish to GitHub release for ${{ matrix.os }}
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - os: ubuntu-latest
-  #           artifact_name: docked
-  #           asset_name: docked-linux-amd64
-  #         - os: windows-latest
-  #           artifact_name: docked.exe
-  #           asset_name: docked-windows-amd64.exe
-  #         - os: macos-latest
-  #           artifact_name: docked
-  #           asset_name: docked-macos-amd64
+  publish-github:
+    name: Publish to GitHub release for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact_name: docked
+            asset_name: docked-linux-amd64
+          - os: windows-latest
+            artifact_name: docked.exe
+            asset_name: docked-windows-amd64.exe
+          - os: macos-latest
+            artifact_name: docked
+            asset_name: docked-macos-amd64
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Build
-  #     run: cargo build --release --locked
-  #   - name: Upload binaries to release
-  #     uses: svenstaro/upload-release-action@v2
-  #     with:
-  #       repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #       file: target/release/${{ matrix.artifact_name }}
-  #       asset_name: ${{ matrix.asset_name }}
-  #       tag: ${{ github.ref }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: cargo build --release --locked
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: target/release/${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
 
   # publish-crates:
   #   name: Publish to crates.io
