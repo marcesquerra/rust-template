@@ -7,7 +7,7 @@ on:
 
 jobs:
   set-version:
-    name: Set''s the version on ''Cargo.toml''
+    name: Set's the version on 'Cargo.toml'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,13 +18,21 @@ jobs:
       uses: thomaseizinger/set-crate-version@master
       with:
         version: ${{ steps.get_version.outputs.version }}
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+    - name: Cargo update
+      uses: actions-rs/cargo@v1
+      with:
+        command: update
     - name: Commit the new version
       uses: github-actions-x/commit@v2.6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
         commit-message: 'Set Cargo.toml to the right version'
-        files: 'Cargo.toml'
+        files: Cargo.toml Cargo.lock
         name: ${{ github.event.pusher.name }}
         email: ${{ github.event.pusher.email }}
 
