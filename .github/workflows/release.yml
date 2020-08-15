@@ -34,7 +34,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         push-branch: 'master'
         commit-message: 'Set Cargo.toml to the right version'
-        files: Cargo.toml Cargo.lock
+        files: .
         name: ${{ github.event.pusher.name }}
         email: ${{ github.event.pusher.email }}
     - name: Login Cargo
