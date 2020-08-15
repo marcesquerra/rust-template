@@ -1,6 +1,6 @@
 [package]
 name = "docked"
-version = "0.0.21"
+version = "0.0.22"
 authors = ["dunlord"]
 edition = "2018"
 description = "Thin wrapper around docker to lunch apps locally in a container"
