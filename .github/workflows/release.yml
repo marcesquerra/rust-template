@@ -3,11 +3,13 @@ name: Publish
 on:
   push:
     tags:
-      - '*'
+      - '[0-9]+.[0-9]+.[0-9]+'
+    branches:
+      - 'master'
 
 jobs:
-  set-version:
-    name: Set's the version on 'Cargo.toml'
+  publish-crates:
+    name: Publish to crates.io
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -35,10 +37,18 @@ jobs:
         files: Cargo.toml Cargo.lock
         name: ${{ github.event.pusher.name }}
         email: ${{ github.event.pusher.email }}
+    - name: Login Cargo
+      uses: actions-rs/cargo@v1
+      with:
+        command: login
+        args: ${{ secrets.CRATES_API_TOKEN }}
+    - name: Publish
+      uses: actions-rs/cargo@v1
+      with:
+        command: publish
 
   publish-github:
     name: Publish to GitHub release for ${{ matrix.os }}
-    needs: set-version
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -71,24 +81,4 @@ jobs:
         file: target/release/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
         tag: ${{ github.ref }}
-
-  publish-crates:
-    name: Publish to crates.io
-    runs-on: ubuntu-latest
-    needs: set-version
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-    - name: Login Cargo
-      uses: actions-rs/cargo@v1
-      with:
-        command: login
-        args: ${{ secrets.CRATES_API_TOKEN }}
-    - name: Publish
-      uses: actions-rs/cargo@v1
-      with:
-        command: publish
 
