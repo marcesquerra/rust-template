@@ -33,8 +33,6 @@ let
   getFromCargo = (import (./. + "/nix/getFromCargo")){ inherit packages rustPlatform; };
 in
   getFromCargo {
-    owner = "marcesquerra";
     name = "docked";
-    version = "b957ddf6496589b3c3c5fa9ab261953a6ed1badd";
     cargoSha256 = "sha256:0jacm96l1gw9nxwavqi1x4669cg6lzy9hr18zjpwlcyb3qkw9z7f";
   }
